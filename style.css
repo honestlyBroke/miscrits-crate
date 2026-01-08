@@ -313,3 +313,131 @@ h1 {
     100% { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
 }
 .anim-reveal { animation: reward-pop 0.4s forwards ease-out; }
+
+/* Add this to the bottom of style.css */
+
+@media (max-width: 768px) {
+    .shop-grid {
+        gap: 15px;
+    }
+
+    .pack-unit {
+        width: 100%; /* Full width on mobile */
+        max-width: 400px;
+    }
+
+    .stats-dashboard {
+        flex-direction: column; /* Stack stats columns */
+        padding: 15px;
+        margin-bottom: 30px;
+    }
+
+    .stat-column {
+        min-width: unset;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 850px) {
+    .crate-container {
+        /* Scale down the entire stage to fit the screen width */
+        transform: scale(0.9); 
+    }
+}
+
+@media (max-width: 600px) {
+    .crate-container {
+        /* Further scale for small phones */
+        transform: scale(0.45); 
+        margin-top: -50px; /* Adjust vertical centering */
+    }
+
+    #results-title {
+        font-size: 32px; /* Make text larger since container is scaled down */
+        top: 10px;
+    }
+
+    .close-btn {
+        top: -40px;
+        right: -20px;
+        width: 80px; /* Make button easier to tap */
+        height: 80px;
+    }
+
+    .close-stage-btn {
+        bottom: -100px; /* Move further down so it doesn't overlap rewards */
+        width: 300px;
+        font-size: 40px;
+    }
+}
+
+/* Improve button sizes for fingers */
+@media (pointer: coarse) {
+    .open-btn, .btn-reset, .close-stage-btn {
+        min-height: 48px;
+    }
+    
+    .reward-sprite:hover {
+        transform: none; /* Disable hover effects on touch devices */
+    }
+}
+
+/* Phone Landscape Mode */
+@media (max-height: 500px) and (orientation: landscape) {
+    .crate-container {
+        /* Zoom out effect to fit the short height */
+        transform: scale(0.65); 
+        margin-top: -20px;
+    }
+
+    #results-title {
+        font-size: 20px;
+        top: 5px;
+        line-height: 1;
+    }
+
+    .close-stage-btn {
+        bottom: -40px;
+        padding: 5px 20px;
+        font-size: 18px;
+    }
+}
+
+/* Mobile Portrait Mode */
+@media (max-width: 600px) {
+    .shop-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .pack-unit {
+        width: 95%; /* Adjust width for smaller screens */
+    }
+
+    .stats-dashboard {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .stat-column {
+        min-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Scaling the reward stage for small screens */
+    .crate-container {
+        transform: scale(0.45);
+    }
+}
+
+/* Global touch improvements */
+button {
+    touch-action: manipulation; /* Prevents double-tap to zoom delay */
+}
+
+.open-btn, .btn-reset, .close-stage-btn {
+    min-height: 44px; /* Minimum recommended tap target height */
+}
+
