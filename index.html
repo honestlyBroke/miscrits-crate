@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Miscrits Pack Opener - Stats Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Miscrits Pack Shop</h1>
+    <div id="loading-msg">Loading Miscrit Data...</div>
+
+    <div class="shop-grid">
+        <div class="pack-unit">
+            <div class="pack-card">
+                <div class="pack-img-container"><div class="badge">∞</div><img src="assets/common_pack.png" class="pack-icon"></div>
+                <div class="pack-info"><div class="pack-title">Common Pack</div><div class="pack-desc">Contains 5 random Miscrits, mostly common</div></div>
+            </div>
+            <button class="open-btn" disabled onclick="startPack('Common Pack', 'assets/common_pack.png')">Open</button>
+        </div>
+        <div class="pack-unit">
+            <div class="pack-card">
+                <div class="pack-img-container"><div class="badge">∞</div><img src="assets/gold_pack.png" class="pack-icon"></div>
+                <div class="pack-info"><div class="pack-title">Gold Crate</div><div class="pack-desc">Contains 5 epic and above Miscrits</div></div>
+            </div>
+            <button class="open-btn" disabled onclick="startPack('Gold Crate', 'assets/gold_pack.png')">Open</button>
+        </div>
+        <div class="pack-unit">
+            <div class="pack-card">
+                <div class="pack-img-container"><div class="badge">∞</div><img src="assets/silver_pack.png" class="pack-icon"></div>
+                <div class="pack-info"><div class="pack-title">Silver Crate</div><div class="pack-desc">Contains 5 rare and above Miscrits</div></div>
+            </div>
+            <button class="open-btn" disabled onclick="startPack('Silver Crate', 'assets/silver_pack.png')">Open</button>
+        </div>
+        <div class="pack-unit">
+            <div class="pack-card">
+                <div class="pack-img-container"><div class="badge">∞</div><img src="assets/bronze_pack.png" class="pack-icon"></div>
+                <div class="pack-info"><div class="pack-title">Bronze Crate</div><div class="pack-desc">Contains 5 random Miscrits, mostly common</div></div>
+            </div>
+            <button class="open-btn" disabled onclick="startPack('Bronze Crate', 'assets/bronze_pack.png')">Open</button>
+        </div>
+    </div>
+
+    <div class="stats-dashboard">
+        <div class="stat-column">
+            <h3>Crates Opened</h3>
+            <div id="stats-crates">
+            </div>
+            
+            <h3>Overall Totals</h3>
+            <div class="stat-row" style="border-top:1px solid #a0c4e4; padding-top:5px;">
+                <span>Total Miscrits (Overall):</span> <span class="stat-val" id="stat-total-overall">0</span>
+            </div>
+            <div class="stat-row">
+                <span>Total S+ Miscrits:</span> <span class="stat-val" id="stat-total-s">0</span>
+            </div>
+            <div class="stat-row">
+                <span>Total A+ Miscrits:</span> <span class="stat-val" id="stat-total-a">0</span>
+            </div>
+            
+            <button class="btn-reset" onclick="resetStats()">Reset Data</button>
+        </div>
+        
+        <div class="stat-column">
+            <h3>Unique Collection</h3>
+            <div id="stats-rarities">
+            </div>
+            <div class="stat-row" style="border-top:1px solid #a0c4e4; padding-top:5px; margin-top:5px;">
+                <span>Total Unique Found:</span> <span class="stat-val" id="stat-total-unique">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="animation-stage">
+        <div class="crate-container" id="crate-view">
+            <img src="assets/closebuttonlarge.png" class="close-btn" onclick="closeStage()"/>
+
+            <div class="window-tabs"></div>
+            <div class="side-arrow left"></div>
+            <div class="side-arrow right"></div>
+
+            <div id="results-title">Congrats! These Miscrits were added<br>to your collection!</div>
+            <img id="stage-crate-img" class="crate-img" src="" alt="Crate" />
+            <div id="results-container"></div>
+            <button class="close-stage-btn" onclick="closeStage()">Continue</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
