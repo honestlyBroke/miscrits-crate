@@ -441,3 +441,14 @@ button {
     min-height: 44px; /* Minimum recommended tap target height */
 }
 
+/* Ensure rarity fractions align properly to the right */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-val {
+    text-align: right;
+    min-width: 60px; /* Provides consistent spacing for the fractions */
+}

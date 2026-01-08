@@ -30,6 +30,9 @@ async function initData() {
         globalMiscritData = await response.json();
         document.getElementById('loading-msg').style.display = 'none';
         document.querySelectorAll('.open-btn').forEach(btn => btn.disabled = false);
+        
+        // Update UI again now that global data is loaded to show correct "Total" counts
+        updateStatsUI();
     } catch (err) { console.error(err); }
 }
 initData();
@@ -224,7 +227,15 @@ function updateStatsUI() {
     document.getElementById('stat-total-s').innerText = userStats.totalSPlus;
     document.getElementById('stat-total-a').innerText = userStats.totalAPlus;
 
-    const rarityCounts = { "Legendary": 0, "Exotic": 0, "Epic": 0, "Rare": 0, "Common": 0 };
+    // 1. Calculate global totals per rarity
+    const globalRarityTotals = { "legendary": 0, "exotic": 0, "epic": 0, "rare": 0, "common": 0 };
+    globalMiscritData.forEach(m => {
+        const r = m.rarity ? m.rarity.toLowerCase() : "common";
+        if (globalRarityTotals.hasOwnProperty(r)) globalRarityTotals[r]++;
+    });
+
+    // 2. Count user's unique collection
+    const userRarityCounts = { "Legendary": 0, "Exotic": 0, "Epic": 0, "Rare": 0, "Common": 0 };
     let totalUnique = 0;
 
     Object.values(userStats.uniqueCollection).forEach(entry => {
@@ -236,19 +247,22 @@ function updateStatsUI() {
         else if(RARITY_CHART[2].keys.includes(r)) label = "Epic";
         else if(RARITY_CHART[3].keys.includes(r)) label = "Rare";
         
-        if(rarityCounts[label] !== undefined) rarityCounts[label]++;
-        else rarityCounts["Common"]++;
+        userRarityCounts[label]++;
     });
 
     document.getElementById('stat-total-unique').innerText = totalUnique;
 
+    // 3. Render rarity rows showing "Found / Global Total"
     const rarDiv = document.getElementById('stats-rarities');
     rarDiv.innerHTML = '';
     RARITY_CHART.forEach(tier => {
-        const count = rarityCounts[tier.label] || 0;
+        const countFound = userRarityCounts[tier.label] || 0;
+        const countTotal = globalRarityTotals[tier.id] || 0;
+        
         rarDiv.innerHTML += `
             <div class="stat-row" style="color:${tier.color}; text-shadow:0.5px 0.5px 0 rgba(0,0,0,0.5);">
-                <span>${tier.label}:</span> <span class="stat-val">${count}</span>
+                <span>${tier.label}:</span> 
+                <span class="stat-val">${countFound}/${countTotal}</span>
             </div>
         `;
     });
