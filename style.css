@@ -366,7 +366,7 @@ h1 {
     }
 
     .close-stage-btn {
-        bottom: -100px; /* Move further down so it doesn't overlap rewards */
+        bottom: -75px; /* Move further down so it doesn't overlap rewards */
         width: 300px;
         font-size: 40px;
     }
