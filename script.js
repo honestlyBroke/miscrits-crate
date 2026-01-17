@@ -26,13 +26,18 @@ async function initData() {
         loadStats();
         updateStatsUI();
         
-        // --- CORS FIX START ---
-        // We use 'allorigins' as a proxy to fetch the data from the remote server
-        // because the browser blocks direct requests to cdn.worldofmiscrits.com.
-        const proxyUrl = 'https://api.allorigins.win/raw?url=';
+        // --- CORS FIX UPDATE ---
+        // 'allorigins' was returning 500 errors. Switched to 'corsproxy.io'.
+        // This proxy is generally faster and more reliable for static files.
+        const proxyUrl = 'https://corsproxy.io/?';
         const targetUrl = 'https://cdn.worldofmiscrits.com/miscrits.json';
         
+        // Note: We encode the component to ensure special characters don't break the proxy URL
         const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+        
+        if (!response.ok) {
+            throw new Error(`Proxy failed with status: ${response.status}`);
+        }
         // --- CORS FIX END ---
 
         globalMiscritData = await response.json();
@@ -41,7 +46,10 @@ async function initData() {
         
         // Update UI again now that global data is loaded to show correct "Total" counts
         updateStatsUI();
-    } catch (err) { console.error(err); }
+    } catch (err) { 
+        console.error("Failed to load Miscrit data:", err);
+        document.getElementById('loading-msg').innerText = "Error loading data. Try refreshing.";
+    }
 }
 initData();
 
