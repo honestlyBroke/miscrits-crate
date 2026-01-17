@@ -26,7 +26,7 @@ async function initData() {
         loadStats();
         updateStatsUI();
         
-        const response = await fetch('https://worldofmiscrits.com/miscrits.json');
+        const response = await fetch('https://cdn.worldofmiscrits.com/miscrits.json');
         globalMiscritData = await response.json();
         document.getElementById('loading-msg').style.display = 'none';
         document.querySelectorAll('.open-btn').forEach(btn => btn.disabled = false);
