@@ -33,7 +33,6 @@ async function initData() {
         if (!response.ok) {
             throw new Error(`Worker failed with status: ${response.status}`);
         }
-        // -----------------------
 
         globalMiscritData = await response.json();
         document.getElementById('loading-msg').style.display = 'none';
@@ -56,6 +55,7 @@ let currentPackType = "";
 function getSpriteUrl(name) {
     if (!name) return 'https://via.placeholder.com/150';
     const cleanName = name.toLowerCase().replace(/[^a-z0-9\s]/g,'').trim().replace(/\s+/g,'_');
+    // Direct CDN Link
     return `https://cdn.worldofmiscrits.com/miscrits/${cleanName}_back.png`;
 }
 
@@ -142,10 +142,27 @@ function generateAndShowRewards() {
     }
 
     const rewards = [];
+    const currentCrateIds = new Set(); // Prevent duplicates in single pack
+
     for (let i = 0; i < 5; i++) {
-        const rarityTier = pickRarityFromChart(allowed);
-        const miscrit = getRandomMiscritByRarity(rarityTier);
-        if(miscrit) rewards.push(miscrit);
+        let miscrit = null;
+        let attempts = 0;
+
+        // Try up to 10 times to find a unique Miscrit for this pack
+        do {
+            const rarityTier = pickRarityFromChart(allowed);
+            const candidate = getRandomMiscritByRarity(rarityTier);
+            
+            if (candidate && !currentCrateIds.has(candidate.id)) {
+                miscrit = candidate;
+            }
+            attempts++;
+        } while (!miscrit && attempts < 10);
+
+        if (miscrit) {
+            rewards.push(miscrit);
+            currentCrateIds.add(miscrit.id);
+        }
     }
 
     rewards.forEach((item, index) => {
@@ -258,7 +275,10 @@ function updateStatsUI() {
         userRarityCounts[label]++;
     });
 
-    document.getElementById('stat-total-unique').innerText = totalUnique;
+    // --- UPDATED: Shows X / Total Fetched ---
+    const totalFetched = globalMiscritData.length;
+    document.getElementById('stat-total-unique').innerText = `${totalUnique} / ${totalFetched}`;
+    // ----------------------------------------
 
     // 3. Render rarity rows showing "Found / Global Total"
     const rarDiv = document.getElementById('stats-rarities');
@@ -275,3 +295,6 @@ function updateStatsUI() {
         `;
     });
 }
+
+// Start loading
+initData();
