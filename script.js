@@ -26,33 +26,25 @@ async function initData() {
         loadStats();
         updateStatsUI();
         
-        // --- CORS FIX UPDATE ---
-        // 'allorigins' was returning 500 errors. Switched to 'corsproxy.io'.
-        // This proxy is generally faster and more reliable for static files.
-        const proxyUrl = 'https://corsproxy.io/?';
-        const targetUrl = 'https://cdn.worldofmiscrits.com/miscrits.json';
+        const workerUrl = 'https://miscrits-proxy.yatosquare.workers.dev/'; 
         
-        // Note: We encode the component to ensure special characters don't break the proxy URL
-        const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+        const response = await fetch(workerUrl);
         
         if (!response.ok) {
-            throw new Error(`Proxy failed with status: ${response.status}`);
+            throw new Error(`Worker failed with status: ${response.status}`);
         }
-        // --- CORS FIX END ---
+        // -----------------------
 
         globalMiscritData = await response.json();
         document.getElementById('loading-msg').style.display = 'none';
         document.querySelectorAll('.open-btn').forEach(btn => btn.disabled = false);
         
-        // Update UI again now that global data is loaded to show correct "Total" counts
         updateStatsUI();
     } catch (err) { 
         console.error("Failed to load Miscrit data:", err);
-        document.getElementById('loading-msg').innerText = "Error loading data. Try refreshing.";
+        document.getElementById('loading-msg').innerText = "Error loading data. Check console.";
     }
 }
-initData();
-
 const stage = document.getElementById('animation-stage');
 const crateView = document.getElementById('crate-view');
 const crateImg = document.getElementById('stage-crate-img');
