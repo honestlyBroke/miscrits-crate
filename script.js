@@ -26,7 +26,15 @@ async function initData() {
         loadStats();
         updateStatsUI();
         
-        const response = await fetch('https://cdn.worldofmiscrits.com/miscrits.json');
+        // --- CORS FIX START ---
+        // We use 'allorigins' as a proxy to fetch the data from the remote server
+        // because the browser blocks direct requests to cdn.worldofmiscrits.com.
+        const proxyUrl = 'https://api.allorigins.win/raw?url=';
+        const targetUrl = 'https://cdn.worldofmiscrits.com/miscrits.json';
+        
+        const response = await fetch(proxyUrl + encodeURIComponent(targetUrl));
+        // --- CORS FIX END ---
+
         globalMiscritData = await response.json();
         document.getElementById('loading-msg').style.display = 'none';
         document.querySelectorAll('.open-btn').forEach(btn => btn.disabled = false);
